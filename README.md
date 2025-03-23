@@ -40,7 +40,7 @@ func main() {
     sg := stargate.NewStargate(rpc, privateKey, stargate.USDT_BSC_TO_ETH, to)
     amount := decimal.NewFromFloat(1.0)
 
-    hash, err := sg.Bridge(30101, amount) // 2 是目标链的 以太坊 ID 
+    hash, err := sg.Bridge(30101, amount) // 30101 是目标链的 以太坊 ID
     if err != nil {
         fmt.Println("Error:", err)
         return

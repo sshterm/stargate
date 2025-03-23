@@ -30,12 +30,6 @@ type StargateQuoteResult struct {
 	Fee StargateMessagingFee
 }
 
-type Stargate struct {
-	rpc, privateKey string
-	to              common.Address
-	chain           Chain
-}
-
 type StargateReceipt struct {
 	AmountSentLD     *big.Int `json:"amountSentLD"`
 	AmountReceivedLD *big.Int `json:"amountReceivedLD"`
@@ -52,6 +46,12 @@ type StargateResOFT struct {
 	Limit         StargateLimit           `json:"limit"`
 	OftFeeDetails []StargateOftFeeDetails `json:"oftFeeDetails"`
 	Receipt       StargateReceipt         `json:"receipt"`
+}
+
+type Stargate struct {
+	rpc, privateKey string
+	to              common.Address
+	chain           Chain
 }
 
 // NewStargate 创建一个新的 Stargate 实例

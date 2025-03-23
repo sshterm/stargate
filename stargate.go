@@ -75,9 +75,6 @@ func (s *Stargate) Bridge(dstEid int, amount decimal.Decimal) (hash common.Hash,
 	if err != nil {
 		return
 	}
-	if err != nil {
-		return
-	}
 
 	var txData []byte
 	txData, err = IStargateABI.Pack("send", sendParam, messageFee, s.to)

@@ -96,12 +96,10 @@ func (s *Stargate) Bridge(dstEid int, amount decimal.Decimal) (hash common.Hash,
 
 func (s *Stargate) quoteToken(client *ethclient.Client) (token common.Address, err error) {
 	var data []byte
-
 	data, err = IStargateABI.Pack("token")
 	if err != nil {
 		return
 	}
-	defer client.Close()
 	var res []byte
 	res, err = client.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &s.chain.BridgeAddress,
@@ -119,12 +117,10 @@ func (s *Stargate) quoteToken(client *ethclient.Client) (token common.Address, e
 }
 func (s *Stargate) quoteOFT(client *ethclient.Client, sendParam *StargateSendParam) (err error) {
 	var data []byte
-
 	data, err = IStargateABI.Pack("quoteOFT", sendParam)
 	if err != nil {
 		return
 	}
-	defer client.Close()
 	var res []byte
 	res, err = client.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &s.chain.BridgeAddress,
@@ -143,7 +139,6 @@ func (s *Stargate) quoteOFT(client *ethclient.Client, sendParam *StargateSendPar
 }
 func (s *Stargate) quoteSend(client *ethclient.Client, sendParam *StargateSendParam) (fee *StargateMessagingFee, err error) {
 	var data []byte
-
 	data, err = IStargateABI.Pack("quoteSend", sendParam, false)
 	if err != nil {
 		return
@@ -158,6 +153,5 @@ func (s *Stargate) quoteSend(client *ethclient.Client, sendParam *StargateSendPa
 	}
 	var feeRes StargateQuoteResult
 	err = IStargateABI.UnpackIntoInterface(&feeRes, "quoteSend", res)
-
 	return &feeRes.Fee, err
 }

@@ -13,21 +13,22 @@ import (
 )
 
 type Stargate struct {
-	rpc, privateKey string
-	to              common.Address
-	chain           Chain
+	rpc        string
+	privateKey []byte
+	to         common.Address
+	chain      Chain
 }
 
 // NewStargate 创建一个新的 Stargate 实例
 // 参数:
 //   - rpc: RPC 节点地址
-//   - privateKey: 私钥字符串
+//   - privateKey: 私钥
 //   - chain: 链配置信息
 //   - to: 目标地址
 //
 // 返回:
 //   - *Stargate: 返回一个初始化的 Stargate 指针
-func NewStargate(rpc, privateKey string, chain Chain, to common.Address) *Stargate {
+func NewStargate(rpc string, privateKey []byte, chain Chain, to common.Address) *Stargate {
 	return &Stargate{rpc: rpc, privateKey: privateKey, chain: chain, to: to}
 }
 
@@ -82,7 +83,7 @@ func (s *Stargate) Bridge(dstEid int, amount decimal.Decimal) (hash common.Hash,
 		return
 	}
 
-	privateKey, err := crypto.HexToECDSA(Removing0xPrefix(s.privateKey))
+	privateKey, err := crypto.ToECDSA(s.privateKey)
 	if err != nil {
 		return
 	}

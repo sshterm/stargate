@@ -34,7 +34,7 @@ import (
 
 func main() {
     rpc := "https://bsc-rpc.publicnode.com"
-    privateKey := "your_private_key"
+    privateKey := []byte
     to := common.HexToAddress("0xRecipientAddress")
 
     sg := stargate.NewStargate(rpc, privateKey, stargate.USDT_BSC_TO_ETH, to)

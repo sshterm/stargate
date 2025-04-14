@@ -2,6 +2,7 @@ package stargate
 
 import (
 	"context"
+	"crypto/ecdsa"
 	"errors"
 	"math/big"
 
@@ -82,8 +83,8 @@ func (s *Stargate) Bridge(dstEid int, amount decimal.Decimal) (hash common.Hash,
 	if err != nil {
 		return
 	}
-
-	privateKey, err := crypto.ToECDSA(s.privateKey)
+	var privateKey *ecdsa.PrivateKey
+	privateKey, err = crypto.ToECDSA(s.privateKey)
 	if err != nil {
 		return
 	}

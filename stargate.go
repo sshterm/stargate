@@ -33,6 +33,36 @@ func NewStargate(rpc string, privateKey []byte, chain Chain, to common.Address) 
 	return &Stargate{rpc: rpc, privateKey: privateKey, chain: chain, to: to}
 }
 
+// Approve 方法批准一个地址可以花费不超过指定数量的代币。
+// 这个方法主要用于在以太坊网络上批准一个桥接地址，允许它代表用户转移一定数量的代币。
+// 参数:
+//   - amount (*big.Int): 要批准的最大代币数量。
+//
+// 返回值:
+//   - hash (common.Hash): 批准交易的哈希值。
+//   - err (error): 如果有错误发生，返回错误信息。
+func (s *Stargate) Approve(amount *big.Int) (hash common.Hash, err error) {
+	var client *ethclient.Client
+	client, err = ethclient.Dial(s.rpc)
+	if err != nil {
+		return
+	}
+	defer client.Close()
+	var txData []byte
+	txData, err = IERC20ABI.Pack("approve", s.chain.BridgeAddress, amount)
+	var privateKey *ecdsa.PrivateKey
+	privateKey, err = crypto.ToECDSA(s.privateKey)
+	if err != nil {
+		return
+	}
+
+	toAddress := s.chain.Address
+
+	value := big.NewInt(0)
+	hash, err = Transaction(client, big.NewInt(int64(s.chain.ChainID)), toAddress, value, txData, privateKey)
+	return
+}
+
 // Bridge 通过 Stargate 协议在不同链之间转移代币
 // 参数:
 //   - dstEid: 目标链的 LayerZero ID
